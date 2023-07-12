@@ -64,22 +64,3 @@ void DisplayThread(void *p1, void *p2, void *p3)
   }
 }
 
-
-/* Functions */
-static int cmd_get_current_thread(const struct shell *sh, size_t argc, char **argv)
-{
-	k_tid_t running;
-	// char buff[10] = {0};
-	running = k_current_get();
-	shell_print(sh, "Current thread running: %d",running);
-	return 0;
-}
-
-
-/* Shell Commands */
-SHELL_STATIC_SUBCMD_SET_CREATE(sub_Thread,
-	SHELL_CMD(test, NULL, "Print", &cmd_get_current_thread)
-);
-SHELL_CMD_REGISTER(thread, &sub_Thread, "Thread commands", NULL);
-
-/*  */

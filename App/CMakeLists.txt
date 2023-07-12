@@ -8,6 +8,7 @@ target_sources(app PRIVATE
   src/main.c
   src/DisplayThread.c
   src/AccelThread.c
+  src/ShellCallbacks.c
   include/DisplayThread.h
   include/AccelThread.h
   )

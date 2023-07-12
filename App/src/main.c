@@ -15,6 +15,8 @@
 #define STACK_SIZE 	2048 
 #define PRIORITY		0
 
+
+
 K_THREAD_DEFINE(
 	AccelHandler, STACK_SIZE,
 	AccelThread, NULL, NULL, NULL,
