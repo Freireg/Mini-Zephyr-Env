@@ -5,12 +5,13 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/ {
+ / {
 	model = "esp32";
 	compatible = "espressif,esp32";
 
 	aliases {
 		i2c-0 = &i2c0;
+		led0 = &led0;
 	};
 
 	chosen {
@@ -20,6 +21,14 @@
 		zephyr,flash = &flash0;
 		zephyr,display = &ssd1306;
 		
+	};
+
+	leds {
+		compatible = "gpio-leds";
+		led0: led_0 {
+			gpios =  <&gpio0 2 GPIO_ACTIVE_HIGH>;
+			label = "Blue - LED1";
+		};
 	};
 };
 
@@ -43,5 +52,11 @@
 		segment-remap;
 		com-invdir;
 		prechargep = < 0x22 >;
+	};
+	mpu6050@68 {
+	compatible = "invensense,mpu6050";
+	reg = <0x68>;
+	status = "okay";
+	int-gpios = <&gpio0 11 GPIO_ACTIVE_HIGH>;
 	};	
 };

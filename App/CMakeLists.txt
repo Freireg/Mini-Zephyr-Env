@@ -6,5 +6,11 @@ project(App)
 
 target_sources(app PRIVATE 
   src/main.c
+  src/DisplayThread.c
+  src/AccelThread.c
+  include/DisplayThread.h
+  include/AccelThread.h
   )
+
+target_include_directories(app PRIVATE include)
 
