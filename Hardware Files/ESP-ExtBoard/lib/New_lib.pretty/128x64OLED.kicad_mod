@@ -44,11 +44,11 @@
   (pad "3" thru_hole oval (at 1.46 -10.6 90) (size 2 1.6) (drill 1) (layers "*.Cu" "*.Mask") (tstamp 7c70bd38-7eee-4201-8164-9c39b8d91980))
   (pad "4" thru_hole oval (at 4 -10.6 90) (size 2 1.6) (drill 1) (layers "*.Cu" "*.Mask") (tstamp 97d453bb-e559-4b41-a555-c5f050bd1525))
   (model "${KIPRJMOD}/lib/Display.pretty/SSD1306_OLED_Display(128x64).step"
-    (offset (xyz 0.25 -1.5 11))
+    (offset (xyz 0.25 -1.5 2.5))
     (scale (xyz 1 1 1))
     (rotate (xyz 0 0 0))
   )
-  (model "${KIPRJMOD}/lib/1x4.STEP"
+  (model "${KIPRJMOD}/lib/1x4.STEP" hide
     (offset (xyz -4.75 9.5 8.5))
     (scale (xyz 1 1 1))
     (rotate (xyz 90 180 90))

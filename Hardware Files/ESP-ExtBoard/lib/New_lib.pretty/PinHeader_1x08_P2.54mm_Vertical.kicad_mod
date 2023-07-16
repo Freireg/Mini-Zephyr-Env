@@ -58,13 +58,13 @@
     (scale (xyz 1 1 1))
     (rotate (xyz 0 0 0))
   )
-  (model "${KIPRJMOD}/lib/1x8.STEP"
+  (model "${KIPRJMOD}/lib/1x8.STEP" hide
     (offset (xyz 1.25 1.25 9))
     (scale (xyz 1 1 1))
     (rotate (xyz -90 0 90))
   )
   (model "${KIPRJMOD}/lib/ITG-MPU.STEP"
-    (offset (xyz -4 -29 6))
+    (offset (xyz -4 -29 -3))
     (scale (xyz 1 1 1))
     (rotate (xyz -90 0 180))
   )

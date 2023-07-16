@@ -56,13 +56,13 @@
     (scale (xyz 1 1 1))
     (rotate (xyz 0 0 0))
   )
-  (model "${KIPRJMOD}/lib/1x6.STEP"
+  (model "${KIPRJMOD}/lib/1x6.STEP" hide
     (offset (xyz -1.25 1 8.5))
     (scale (xyz 1 1 1))
     (rotate (xyz -90 0 0))
   )
   (model "${KIPRJMOD}/lib/Product_TF Micro SD Card Memory Modul Arduino.STEP"
-    (offset (xyz 38.5 -6.5 11))
+    (offset (xyz 38.5 -6.5 2.5))
     (scale (xyz 1 1 1))
     (rotate (xyz 0 0 -90))
   )

@@ -54,13 +54,13 @@
     (scale (xyz 1 1 1))
     (rotate (xyz 0 0 0))
   )
-  (model "${KIPRJMOD}/lib/1x4.STEP"
+  (model "${KIPRJMOD}/lib/1x4.STEP" hide
     (offset (xyz -1.25 1.25 8.5))
     (scale (xyz 1 1 1))
     (rotate (xyz -90 0 0))
   )
   (model "${KIPRJMOD}/lib/Sensor BME280.stp"
-    (offset (xyz 5.5 -4 12.5))
+    (offset (xyz 5.5 -4 4))
     (scale (xyz 1 1 1))
     (rotate (xyz 0 180 -90))
   )
