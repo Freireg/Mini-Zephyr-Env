@@ -11,7 +11,7 @@
 
 #include "DisplayThread.h"
 
-extern struct k_queue accel_queue;
+extern struct k_msgq accel_queue;
 
 const struct device *display_dev = DEVICE_DT_GET(DT_CHOSEN(zephyr_display));
 
@@ -52,24 +52,27 @@ void DisplayThread(void *p1, void *p2, void *p3)
 	readings_label = lv_label_create(lv_scr_act());
 	lv_obj_add_style(readings_label, &style, 0);
 	lv_label_set_text(readings_label, "Running Zephyr!");
-	lv_obj_align(readings_label, LV_ALIGN_CENTER, 0, 0);
+	lv_obj_align(readings_label, LV_ALIGN_TOP_MID, 0, 0);
 
 	lv_task_handler();
   
   while(1)
   {	
 		// sprintf(count_str, "%d", counter);
-		if (!k_queue_is_empty(&accel_queue))
-		{
-			if (k_queue_remove(&accel_queue, &count_str))
-			{
-				lv_label_set_text(hello_world_label, count_str);
-			}
-			
-		}
+		// printk("Aceel thread\n");
+		double test[7];
+		char buff[100];
+		k_msgq_get(&accel_queue, &test, K_MSEC(5));
+		// printf("Reading: %lf\n", test[0]);
+		sprintf(buff, "Temp: %1.f C\n "
+																	"AX: %2.f m/s/s\nAY: %2.f m/s/s\nAZ: %2.f m/s/s\n",
+																	test[0], test[1], test[2], test[3]);
+		lv_label_set_text(readings_label, buff);
+		// lv_obj_align(readings_label, LV_ALIGN_CENTER, 0, 0);
+
 		lv_task_handler();
 		counter++;
-		k_msleep(1000);
+		k_msleep(100);
   }
 }
 
