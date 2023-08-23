@@ -10,18 +10,22 @@
  */
 #include "AccelThread.h"
 
-const struct device *const mpu6050 = DEVICE_DT_GET_ONE(invensense_mpu6050);
+K_QUEUE_DEFINE(accel_queue);
 
+const struct device *const mpu6050 = DEVICE_DT_GET_ONE(invensense_mpu6050);
 
 void AccelThread(void *p1, void *p2, void *p3)
 {
+	uint8_t qTest = "Testing queue\n";
+	k_queue_init(&accel_queue);
   if (!device_is_ready(mpu6050)) {
     printk("Device %s is not ready\n", mpu6050->name);
     return 0;
 	}
 	while(1)
 	{
-    k_msleep(250);
+		k_queue_append(&accel_queue, &qTest);
+    k_msleep(1000);
 	}
 }
 

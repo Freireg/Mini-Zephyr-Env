@@ -11,6 +11,8 @@
 
 #include "DisplayThread.h"
 
+extern struct k_queue accel_queue;
+
 const struct device *display_dev = DEVICE_DT_GET(DT_CHOSEN(zephyr_display));
 
 
@@ -56,8 +58,15 @@ void DisplayThread(void *p1, void *p2, void *p3)
   
   while(1)
   {	
-		sprintf(count_str, "%d", counter);
-    lv_label_set_text(hello_world_label, count_str);
+		// sprintf(count_str, "%d", counter);
+		if (!k_queue_is_empty(&accel_queue))
+		{
+			if (k_queue_remove(&accel_queue, &count_str))
+			{
+				lv_label_set_text(hello_world_label, count_str);
+			}
+			
+		}
 		lv_task_handler();
 		counter++;
 		k_msleep(1000);
