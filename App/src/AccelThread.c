@@ -11,14 +11,13 @@
 #include "AccelThread.h"
 
 K_MSGQ_DEFINE(accel_queue, 7*sizeof(double), 5, 2);
+K_EVENT_DEFINE(kEvent);
 
 const struct device *const mpu6050 = DEVICE_DT_GET_ONE(invensense_mpu6050);
 static int process_mpu6050(const struct device *dev);
 
 void AccelThread(void *p1, void *p2, void *p3)
 {
-	uint8_t qTest = "Testing queue\n";
-	//k_queue_init(&accel_queue);
   if (!device_is_ready(mpu6050)) {
     printk("Device %s is not ready\n", mpu6050->name);
     return 0;
@@ -51,16 +50,16 @@ static int process_mpu6050(const struct device *dev)
 					&temperature);
 	}
 	if (rc == 0) {
-		printf("  temp %f C\n"
-					 "  accel %f %f %f m/s/s\n"
-		       "  gyro  %f %f %f rad/s\n",
-		       sensor_value_to_double(&temperature),
-		       sensor_value_to_double(&accel[0]),
-		       sensor_value_to_double(&accel[1]),
-		       sensor_value_to_double(&accel[2]),
-		       sensor_value_to_double(&gyro[0]),
-		       sensor_value_to_double(&gyro[1]),
-		       sensor_value_to_double(&gyro[2]));
+		// printf("  temp %f C\n"
+		// 			 "  accel %f %f %f m/s/s\n"
+		//        "  gyro  %f %f %f rad/s\n",
+		//        sensor_value_to_double(&temperature),
+		//        sensor_value_to_double(&accel[0]),
+		//        sensor_value_to_double(&accel[1]),
+		//        sensor_value_to_double(&accel[2]),
+		//        sensor_value_to_double(&gyro[0]),
+		//        sensor_value_to_double(&gyro[1]),
+		//        sensor_value_to_double(&gyro[2]));
 	} else {
 		printf("sample fetch/get failed: %d\n", rc);
 	}
@@ -79,7 +78,9 @@ static int process_mpu6050(const struct device *dev)
 /* Functions */
 static int cmd_get_accel_read(const struct shell *sh, size_t argc, char **argv)
 {
+	k_event_post(&kEvent, 0x001);
   // process_mpu6050(mpu6050);
+	
 	return 0;
 }
 

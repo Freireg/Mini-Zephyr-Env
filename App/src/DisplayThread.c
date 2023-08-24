@@ -12,6 +12,7 @@
 #include "DisplayThread.h"
 
 extern struct k_msgq accel_queue;
+extern struct k_event kEvent;
 
 const struct device *display_dev = DEVICE_DT_GET(DT_CHOSEN(zephyr_display));
 
@@ -58,17 +59,27 @@ void DisplayThread(void *p1, void *p2, void *p3)
   
   while(1)
   {	
-		// sprintf(count_str, "%d", counter);
-		// printk("Aceel thread\n");
+		uint32_t events = 0;
 		double test[7];
 		char buff[100];
+
 		k_msgq_get(&accel_queue, &test, K_MSEC(5));
-		// printf("Reading: %lf\n", test[0]);
-		sprintf(buff, "Temp: %1.f C\n "
-																	"AX: %2.f m/s/s\nAY: %2.f m/s/s\nAZ: %2.f m/s/s\n",
-																	test[0], test[1], test[2], test[3]);
+
+		events = k_event_wait(&kEvent, 0x001, false, K_MSEC(50));
+		if(events == 0)
+		{
+			sprintf(buff, "Temp: %1.f C\n"
+																		"AX: %2.f m/s/s\nAY: %2.f m/s/s\nAZ: %2.f m/s/s\n",
+																		test[0], test[1], test[2], test[3]);
+		}
+		else
+		{
+			sprintf(buff, "Temp: %1.f C\n"
+																		"GX: %2.f m/s/s\nGY: %2.f m/s/s\nGZ: %2.f m/s/s\n",
+																		test[0], test[4], test[5], test[6]);
+		}
+		
 		lv_label_set_text(readings_label, buff);
-		// lv_obj_align(readings_label, LV_ALIGN_CENTER, 0, 0);
 
 		lv_task_handler();
 		counter++;
