@@ -22,6 +22,7 @@ void DisplayThread(void *p1, void *p2, void *p3)
   /* Initialization of the Thread */
   static lv_style_t style;
   lv_obj_t *hello_world_label;
+	// lv_obj_t *screen;
   lv_obj_t *readings_label;
   char count_str[50] = {0};
 	int counter = 0;
@@ -32,23 +33,25 @@ void DisplayThread(void *p1, void *p2, void *p3)
 	}
 
   if (IS_ENABLED(CONFIG_LV_Z_POINTER_KSCAN)) {
-		lv_obj_t *hello_world_button;
+		// lv_obj_t *hello_world_button;
 
-		hello_world_button = lv_btn_create(lv_scr_act());
-		lv_obj_align(hello_world_button, LV_ALIGN_CENTER, 0, 0);
-		hello_world_label = lv_label_create(hello_world_button);
+		// hello_world_button = lv_btn_create(lv_scr_act());
+		// lv_obj_align(hello_world_button, LV_ALIGN_CENTER, 0, 0);
+		// hello_world_label = lv_label_create(hello_world_button);
 	} 
 	else {
-		hello_world_label = lv_label_create(lv_scr_act());
+		// hello_world_label = lv_label_create(lv_scr_act());
 	}
 
 	lv_style_init(&style);
 	lv_style_set_bg_color(&style, lv_color_black());
-	// lv_style_set_text_color(&style, lv_color_white());
+	lv_style_set_text_color(&style, lv_color_white());
 	lv_style_set_text_decor(&style, LV_TEXT_DECOR_NONE);
-
-	lv_label_set_text(hello_world_label, "Accel Readings");
-	lv_obj_align(hello_world_label, LV_ALIGN_BOTTOM_MID, 0, 0);
+	
+	lv_obj_add_style(lv_scr_act(), &style, 0);
+	
+	// lv_label_set_text(hello_world_label, "Accel Readings");
+	// lv_obj_align(hello_world_label, LV_ALIGN_BOTTOM_MID, 0, 0);
 
 	readings_label = lv_label_create(lv_scr_act());
 	lv_obj_add_style(readings_label, &style, 0);
@@ -68,14 +71,14 @@ void DisplayThread(void *p1, void *p2, void *p3)
 		events = k_event_wait(&kEvent, 0x001, false, K_MSEC(50));
 		if(events == 0)
 		{
-			sprintf(buff, "Temp: %1.f C\n"
-																		"AX: %2.f m/s/s\nAY: %2.f m/s/s\nAZ: %2.f m/s/s\n",
+			sprintf(buff, "Temp: %.1f C\n\n"
+																		"AX: %.1f m/s/s\nAY: %.1f m/s/s\nAZ: %.1f m/s/s\n",
 																		test[0], test[1], test[2], test[3]);
 		}
 		else
 		{
-			sprintf(buff, "Temp: %1.f C\n"
-																		"GX: %2.f m/s/s\nGY: %2.f m/s/s\nGZ: %2.f m/s/s\n",
+			sprintf(buff, "Temp: %.1f C\n\n"
+																		"GX: %.1f m/s/s\nGY: %.1f m/s/s\nGZ: %.1f m/s/s\n",
 																		test[0], test[4], test[5], test[6]);
 		}
 		
