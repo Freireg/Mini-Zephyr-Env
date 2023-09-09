@@ -10,7 +10,7 @@
  */
 
 #include "DisplayThread.h"
-#include "AccelThread.h"
+#include "SensorThread.h"
 
 #define STACK_SIZE 	2048 
 #define PRIORITY		0
@@ -26,3 +26,9 @@ K_THREAD_DEFINE(
 	DisplayHandler, STACK_SIZE,
 	DisplayThread, NULL, NULL, NULL,
 	PRIORITY, 0, 0);
+
+K_THREAD_DEFINE(
+	TempHandler, STACK_SIZE,
+	TempThread, NULL, NULL, NULL,
+	PRIORITY, 0, 0
+);

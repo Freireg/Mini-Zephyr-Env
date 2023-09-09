@@ -7,10 +7,10 @@ project(App)
 target_sources(app PRIVATE 
   src/main.c
   src/DisplayThread.c
-  src/AccelThread.c
+  src/SensorThread.c
   src/ShellCallbacks.c
   include/DisplayThread.h
-  include/AccelThread.h
+  include/SensorThread.h
   )
 
 target_include_directories(app PRIVATE include)

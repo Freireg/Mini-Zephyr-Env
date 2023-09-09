@@ -8,8 +8,8 @@
  * @copyright Copyright (c) 2023
  * 
  */
-#ifndef _ACCEL_THREAD_H_
-#define _ACCEL_THREAD_H_
+#ifndef _SENSOR_THREAD_H_
+#define _SENSOR_THREAD_H_
 
 #include <zephyr/kernel.h>
 #include <zephyr/device.h>
@@ -19,6 +19,13 @@
 #include <stdio.h>
 #include <string.h>
 
+
+#define TEMP_READINGS 3
+#define ACCEL_READINGS 7
+
+
 void AccelThread(void *p1, void *p2, void *p3);
+
+void TempThread(void *p1, void *p2, void *p3);
 
 #endif

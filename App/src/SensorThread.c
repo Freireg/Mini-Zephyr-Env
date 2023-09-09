@@ -8,12 +8,16 @@
  * @copyright Copyright (c) 2023
  * 
  */
-#include "AccelThread.h"
+#include "SensorThread.h"
 
-K_MSGQ_DEFINE(accel_queue, 7*sizeof(double), 5, 2);
+K_MSGQ_DEFINE(accel_queue, ACCEL_READINGS*sizeof(double), 5, 2);
+K_MSGQ_DEFINE(temp_queue, TEMP_READINGS*sizeof(double), 5, 2);
 K_EVENT_DEFINE(kEvent);
 
 const struct device *const mpu6050 = DEVICE_DT_GET_ONE(invensense_mpu6050);
+const struct device *const bme280 = DEVICE_DT_GET_ANY(bosch_bme280);
+
+
 static int process_mpu6050(const struct device *dev);
 
 void AccelThread(void *p1, void *p2, void *p3)
@@ -29,12 +33,44 @@ void AccelThread(void *p1, void *p2, void *p3)
 	}
 }
 
+void TempThread(void *p1, void *p2, void *p3)
+{
+	struct sensor_value temp, press, humidity;
+	double qBuffer[TEMP_READINGS];
+	/* Initialization of the Thread */
+	if (!device_is_ready(bme280)) {
+		printk("\nError: Device \"%s\" is not ready; "
+		       "check the driver initialization logs for errors.\n",
+		       bme280->name);
+		return NULL;
+	}
+	while(1)
+	{
+		sensor_sample_fetch(bme280);
+		sensor_channel_get(bme280, SENSOR_CHAN_AMBIENT_TEMP, &temp);
+		sensor_channel_get(bme280, SENSOR_CHAN_PRESS, &press);
+		sensor_channel_get(bme280, SENSOR_CHAN_HUMIDITY, &humidity);
+
+		// printk("temp: %d.%06d; press: %d.%06d; humidity: %d.%06d\n",
+		//       temp.val1, temp.val2, press.val1, press.val2,
+		//       humidity.val1, humidity.val2);
+
+		qBuffer[0] = sensor_value_to_double(&temp);
+		qBuffer[1] = sensor_value_to_double(&press);
+		qBuffer[2] = sensor_value_to_double(&humidity);
+
+		k_msgq_put(&temp_queue, qBuffer, K_NO_WAIT);
+
+		k_msleep(10);
+	}
+}
+
 static int process_mpu6050(const struct device *dev)
 {
 	struct sensor_value temperature;
 	struct sensor_value accel[3];
 	struct sensor_value gyro[3];
-	double buffer[7];
+	double buffer[ACCEL_READINGS];
 	int rc = sensor_sample_fetch(dev);
 
 	if (rc == 0) {
