@@ -15,6 +15,7 @@
 #include <zephyr/kernel.h>
 #include <zephyr/device.h>
 #include <zephyr/drivers/display.h>
+#include <zephyr/drivers/gpio.h>
 #include <zephyr/shell/shell.h>
 #include <lvgl.h>
 #include <stdio.h>

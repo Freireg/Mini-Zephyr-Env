@@ -30,4 +30,4 @@ static int cmd_get_current_thread(const struct shell *sh, size_t argc, char **ar
 SHELL_STATIC_SUBCMD_SET_CREATE(sub_Thread,
 	SHELL_CMD(test, NULL, "Print", &cmd_get_current_thread)
 );
-SHELL_CMD_REGISTER(thread, &sub_Thread, "Thread commands", NULL);
+SHELL_CMD_REGISTER(thread, NULL, "Thread commands", &cmd_get_current_thread);

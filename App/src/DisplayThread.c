@@ -11,12 +11,14 @@
 
 #include "DisplayThread.h"
 
+#define LED0_NODE DT_ALIAS(led0)
+
 extern struct k_msgq accel_queue;
 extern struct k_msgq temp_queue;
 extern struct k_event kEvent;
 
 const struct device *display_dev = DEVICE_DT_GET(DT_CHOSEN(zephyr_display));
-
+static const struct gpio_dt_spec led = GPIO_DT_SPEC_GET(LED0_NODE, gpios);
 uint8_t displayState = 0;
 
 void DisplayThread(void *p1, void *p2, void *p3)
@@ -33,6 +35,19 @@ void DisplayThread(void *p1, void *p2, void *p3)
 		printf("Device %s is not ready\n", display_dev->name);
 		return;
 	}
+
+	if (!device_is_ready(led.port)) {
+		printf("Device %s is not ready\n", display_dev->name);
+		return;
+	}
+
+	if (!gpio_pin_configure_dt(&led, GPIO_OUTPUT)) {
+			printk("Error: failed to configure LED device %s pin %d\n",
+			     	led.port->name, led.pin);
+		} else{
+			gpio_pin_set_dt(&led, 0);
+		}
+	
 
 	lv_style_init(&style);
 	lv_style_set_bg_color(&style, lv_color_black());
@@ -112,6 +127,12 @@ static int changeView(const struct shell *sh, size_t argc, char **argv, void *da
 	return 0;
 }
 
+static int toggleLed(const struct shell *sh, size_t argc, char **argv)
+{
+	
+	gpio_pin_toggle_dt(&led);
+	return 0;
+}
 
 //Creating a subcommand dictionary
 SHELL_SUBCMD_DICT_SET_CREATE(sub_change_view, changeView,
@@ -120,3 +141,4 @@ SHELL_SUBCMD_DICT_SET_CREATE(sub_change_view, changeView,
 );
 
 SHELL_CMD_REGISTER(display, &sub_change_view, "Change display view", NULL);
+SHELL_CMD_REGISTER(toggle, NULL, "Toggle the board LED", &toggleLed);
