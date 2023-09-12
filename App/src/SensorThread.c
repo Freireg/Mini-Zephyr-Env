@@ -24,7 +24,7 @@ void AccelThread(void *p1, void *p2, void *p3)
 {
   if (!device_is_ready(mpu6050)) {
     printk("Device %s is not ready\n", mpu6050->name);
-    return 0;
+    // return 0;
 	}
 	while(1)
 	{	
@@ -42,7 +42,7 @@ void TempThread(void *p1, void *p2, void *p3)
 		printk("\nError: Device \"%s\" is not ready; "
 		       "check the driver initialization logs for errors.\n",
 		       bme280->name);
-		return NULL;
+		// return NULL;
 	}
 	while(1)
 	{
