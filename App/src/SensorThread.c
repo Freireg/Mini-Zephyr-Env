@@ -12,6 +12,7 @@
 
 K_MSGQ_DEFINE(accel_queue, ACCEL_READINGS*sizeof(double), 5, 2);
 K_MSGQ_DEFINE(temp_queue, TEMP_READINGS*sizeof(double), 5, 2);
+K_MSGQ_DEFINE(sensor_temp_queue, TEMP_READINGS*sizeof(struct sensor_value), 5, 2);
 K_EVENT_DEFINE(kEvent);
 
 const struct device *const mpu6050 = DEVICE_DT_GET_ONE(invensense_mpu6050);
@@ -35,7 +36,7 @@ void AccelThread(void *p1, void *p2, void *p3)
 
 void TempThread(void *p1, void *p2, void *p3)
 {
-	struct sensor_value temp, press, humidity;
+	struct sensor_value temp, press, humidity, sensorBuff[TEMP_READINGS];
 	double qBuffer[TEMP_READINGS];
 	/* Initialization of the Thread */
 	if (!device_is_ready(bme280)) {
@@ -51,15 +52,16 @@ void TempThread(void *p1, void *p2, void *p3)
 		sensor_channel_get(bme280, SENSOR_CHAN_PRESS, &press);
 		sensor_channel_get(bme280, SENSOR_CHAN_HUMIDITY, &humidity);
 
-		// printk("temp: %d.%06d; press: %d.%06d; humidity: %d.%06d\n",
-		//       temp.val1, temp.val2, press.val1, press.val2,
-		//       humidity.val1, humidity.val2);
+		sensorBuff[0] = temp;
+		sensorBuff[1] = press;
+		sensorBuff[2] = humidity;
 
 		qBuffer[0] = sensor_value_to_double(&temp);
 		qBuffer[1] = sensor_value_to_double(&press);
 		qBuffer[2] = sensor_value_to_double(&humidity);
 
 		k_msgq_put(&temp_queue, qBuffer, K_NO_WAIT);
+		k_msgq_put(&sensor_temp_queue, sensorBuff, K_NO_WAIT);
 
 		k_msleep(10);
 	}

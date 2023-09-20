@@ -49,8 +49,6 @@
 		page-offset = < 0x0 >;
 		display-offset = < 0x0 >;
 		multiplex-ratio = < 0x3f >;
-		segment-remap;
-		com-invdir;
 		prechargep = < 0x22 >;
 	};
 	mpu6050@68 {

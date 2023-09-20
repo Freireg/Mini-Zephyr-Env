@@ -11,6 +11,7 @@
 
 #include "DisplayThread.h"
 #include "SensorThread.h"
+#include "BTHome.h"
 
 #define STACK_SIZE 	2048 
 #define PRIORITY		0
@@ -30,5 +31,10 @@ K_THREAD_DEFINE(
 K_THREAD_DEFINE(
 	TempHandler, STACK_SIZE,
 	TempThread, NULL, NULL, NULL,
+	PRIORITY, 0, 0
+);
+K_THREAD_DEFINE(
+	BTHomeHandler, STACK_SIZE,
+	BTHomeThread, NULL, NULL, NULL,
 	PRIORITY, 0, 0
 );
