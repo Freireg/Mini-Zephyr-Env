@@ -1,0 +1,64 @@
+
+/*
+ * Copyright (c) 2023 Espressif Systems (Shanghai) Co., Ltd.
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+ / {
+	model = "esp32";
+	compatible = "espressif,esp32";
+
+	aliases {
+		i2c-0 = &i2c0;
+		led0 = &led0;
+	};
+
+	chosen {
+		zephyr,sram = &sram0;
+		zephyr,console = &uart0;
+		zephyr,shell-uart = &uart0;
+		zephyr,flash = &flash0;
+		zephyr,display = &ssd1306;
+		
+	};
+
+	leds {
+		compatible = "gpio-leds";
+		led0: led_0 {
+			gpios =  <&gpio0 2 GPIO_ACTIVE_HIGH>;
+			label = "Blue - LED1";
+		};
+	};
+};
+
+&i2c0 {
+	status = "okay";
+	clock-frequency = <I2C_BITRATE_FAST>;
+	sda-gpios = <&gpio0 21 (GPIO_OPEN_DRAIN  )>;
+	scl-gpios = <&gpio0 22 (GPIO_OPEN_DRAIN  )>;
+	pinctrl-0 = <&i2c0_default>;
+	pinctrl-names = "default";
+	ssd1306: ssd1306@3c {
+		compatible = "solomon,ssd1306fb";
+		reg = < 0x3c >;
+		label = "SSD1306";
+		width = < 128 >;
+		height = < 64 >;
+		segment-offset = < 0x0 >;
+		page-offset = < 0x0 >;
+		display-offset = < 0x0 >;
+		multiplex-ratio = < 0x3f >;
+		prechargep = < 0x22 >;
+	};
+	mpu6050@68 {
+	compatible = "invensense,mpu6050";
+	reg = <0x68>;
+	status = "okay";
+	int-gpios = <&gpio0 11 GPIO_ACTIVE_HIGH>;
+	};	
+	bme280: bme280@76 {
+		compatible = "bosch,bme280";
+		reg = <0x76>;
+	};
+};
